@@ -1,22 +1,18 @@
-import { asyncFn } from './example.js'
+import axios from 'axios'
+import { fetchMoiveTitle } from './example.js'
 
 describe('비동기 테스트', () => {
-  test('done', (done) => {
-    asyncFn().then(res => {
-      expect(res).toBe('Done!')
-      done()
+  test('영화 제목 변환', async () => {
+    axios.get = jest.fn(() => {
+      return new Promise(resolve => {
+        resolve({
+          data: {
+            Title: 'Frozen II'
+          }
+        })
+      })
     })
-  })
-  test('then', () => {
-    return asyncFn().then(res => {
-      expect(res).toBe('Done!')
-    })
-  })
-
-  test('resolves', () => expect(asyncFn()).resolves.toBe('Done!'))
-
-  test('async/await', async () => {
-    const res = await asyncFn()
-    expect(res).toBe('Done!')
+    const title = await fetchMoiveTitle()
+    expect(title).toBe('Frozen ii')
   })
 })
